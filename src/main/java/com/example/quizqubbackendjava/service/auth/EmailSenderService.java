@@ -23,7 +23,7 @@ public class EmailSenderService {
         simpleMailMessage.setSubject("Account confirmation");
         simpleMailMessage.setTo(user.getEmail());
         simpleMailMessage.setText("Hello"
-        + "\nConfirm your email here --> http://localhost:8081/api/v1/auth/confirm?token=" + token);
+        + "\nConfirm your email here --> http://localhost:8081/api/v1/auth/confirmation?token=" + token);
         javaMailSender.send(simpleMailMessage);
     }
 }
