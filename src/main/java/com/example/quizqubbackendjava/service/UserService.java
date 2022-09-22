@@ -38,7 +38,7 @@ public class UserService {
                 .roleDescription("Admins can manipulate with accounts and delete users either as teachers")
                 .build();
 
-        User jkobAdmin = User.builder()
+        User adminJacob = User.builder()
                 .firstName("Jakub")
                 .lastName("Matras")
                 .username("pozerinhooo")
@@ -48,7 +48,30 @@ public class UserService {
                 .enabled(ENABLE_ACCOUNT)
                 .build();
 
-        userRepository.save(jkobAdmin);
+        User teacherWalter = User.builder()
+                        .firstName("Walter")
+                        .lastName("White")
+                        .username("teacher")
+                        .password(passwordEncoder.encode("teacher"))
+                        .role(teacherRole)
+                        .email("walter.white@gmail.com")
+                        .enabled(ENABLE_ACCOUNT)
+                        .build();
+
+        User userChris = User.builder()
+                .firstName("Chris")
+                .lastName("Volkanowic")
+                .username("student")
+                .password(passwordEncoder.encode("student"))
+                .role(userRole)
+                .email("chris.volkanowic@gmail.com")
+                .enabled(ENABLE_ACCOUNT)
+                .build();
+
+        userRepository.save(adminJacob);
+        userRepository.save(teacherWalter);
+        userRepository.save(userChris);
+
         roleRepository.saveAll(List.of(userRole, teacherRole, adminRole));
 
     }

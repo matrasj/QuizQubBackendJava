@@ -13,6 +13,7 @@ import java.util.Date;
 @Builder
 @Data
 public class UserPayloadResponse {
+    private Long id;
     private String firstName;
     private String lastName;
     private String username;

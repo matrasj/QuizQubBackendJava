@@ -6,6 +6,7 @@ import com.example.quizqubbackendjava.model.payload.user.UserPayloadResponse;
 public class UserPayloadResponseMapper {
     public static UserPayloadResponse mapToUserPayloadResponse(User user) {
         return UserPayloadResponse.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .username(user.getUsername())
