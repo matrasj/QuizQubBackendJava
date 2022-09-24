@@ -13,6 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @Getter
 @Setter
+@ToString
 @Table(name = "options")
 public class Option {
     @Id

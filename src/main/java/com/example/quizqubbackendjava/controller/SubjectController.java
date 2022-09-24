@@ -20,7 +20,7 @@ public class SubjectController {
     private final SubjectService subjectService;
 
     @GetMapping
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     public ResponseEntity<List<SubjectPayloadResponse>> getSubjects() {
         return ResponseEntity.status(OK)
                 .body(subjectService.findAllSubjects());

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -34,6 +36,8 @@ public class QuestionController {
                 .body(questionService.updateQuestion(questionPayloadRequest, questionId));
     }
 
+
+
     @DeleteMapping("/delete/{questionId}")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<String> deleteQuestion(@PathVariable Long questionId) {
@@ -49,10 +53,31 @@ public class QuestionController {
                 .body(questionService.findQuestionsWithPagination(pageNumber, pageSize));
     }
 
+    @GetMapping("/pagination/findByContentKeywordContaining")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<Page<QuestionPayloadResponse>> getQuestionsWithPaginationByContentContaining(@RequestParam int pageNumber,
+                                                                                                       @RequestParam int pageSize,
+                                                                                                       @RequestParam String keyword) {
+        return ResponseEntity.status(OK)
+                .body(questionService.findQuestionsWithPaginationByContentContaining(
+                        pageNumber,
+                        pageSize,
+                        keyword
+                        ));
+    }
+
     @GetMapping("/{questionId}")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<QuestionPayload> getQuestionById(@PathVariable Long questionId) {
         return ResponseEntity.status(OK)
                 .body(questionService.findQuestionById(questionId));
+    }
+
+    @GetMapping("/findBySubjectName")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<List<QuestionPayload>> getQuestionsBySubjectName(@RequestParam String subjectName) {
+        return ResponseEntity.status(OK)
+                .body(questionService.findQuestionsBySubjectName(subjectName));
     }
 
 

@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SubjectService {
-    private final SubjectRepository questionCategoryRepository;
+    private final SubjectRepository subjectRepository;
+
 
     public List<SubjectPayloadResponse> findAllSubjects() {
-        return questionCategoryRepository
+        return subjectRepository
                 .findAll()
                 .stream()
                 .map(questionCategory -> new SubjectPayloadResponse(
@@ -34,6 +35,8 @@ public class SubjectService {
                 .builder()
                 .name("IT")
                 .build();
+
+
 
         Subject maths = Subject
                 .builder()
@@ -55,6 +58,7 @@ public class SubjectService {
                 .name("Biology")
                 .build();
 
-        questionCategoryRepository.saveAll(List.of(it, maths, english, geography, biology));
+        subjectRepository.saveAll(List.of(it, maths, english, geography, biology));
+
     }
 }

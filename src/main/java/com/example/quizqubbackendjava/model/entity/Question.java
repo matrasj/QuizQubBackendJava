@@ -15,6 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @Getter
 @Setter
+@ToString
 @Table(name = "question")
 public class Question {
     @Id
@@ -37,5 +38,7 @@ public class Question {
     @OneToOne
     @JoinColumn(name = "correct_option_id", referencedColumnName = "id")
     private Option correctOption;
+
+
 
 }

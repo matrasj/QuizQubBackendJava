@@ -19,6 +19,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,7 @@ public class QuestionService {
     private static final String SUCCESSFULLY_DELETION_MESSAGE = "Successfully deleted question";
     private final QuestionRepository questionRepository;
     private final SubjectRepository subjectRepository;
+    private final OptionRepository optionRepository;
 
     @Transactional
     public String createQuestion(QuestionPayloadRequest questionPayloadRequest) {
@@ -48,15 +52,25 @@ public class QuestionService {
 
     @Transactional
     public String updateQuestion(QuestionPayloadRequest questionPayloadRequest, Long questionId) {
+        Question existingQuestion = questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException(String.format(QUESTION_NOT_FOUND_MESSAGE, questionId)));
+
         Question question = buildQuestionFromPayload(questionPayloadRequest);
 
-        question.getOptions().forEach((option) -> {
-            question.getOptions().add(option);
-            option.setQuestion(question);
+        existingQuestion.setContent(question.getContent());
+        existingQuestion.setCorrectOption(question.getCorrectOption());
+
+        optionRepository.deleteAll(existingQuestion.getOptions());
+        existingQuestion.setOptions(question.getOptions());
+
+
+
+        existingQuestion.getOptions().forEach((option) -> {
+            existingQuestion.getOptions().add(option);
+            option.setQuestion(existingQuestion);
         });
 
-        question.setId(questionId);
-        questionRepository.save(question);
+        questionRepository.save(existingQuestion);
 
         return SUCCESSFULLY_ADD_OR_CHANGED_QUESTION;
     }
@@ -113,5 +127,29 @@ public class QuestionService {
         questionRepository.deleteById(questionId);
 
         return SUCCESSFULLY_DELETION_MESSAGE;
+    }
+
+    public Page<QuestionPayloadResponse> findQuestionsWithPaginationByContentContaining(int pageNumber, int pageSize, String keyword) {
+        Page<Question> questionsByKeyword =
+                questionRepository.findByContentContaining(keyword, PageRequest.of(pageNumber, pageSize));
+
+        return new PageImpl<>(
+                questionsByKeyword
+                        .stream()
+                        .map(QuestionPayloadResponseMapper::mapToQuestionPayloadResponse)
+                        .collect(Collectors.toList()),
+                PageRequest.of(pageNumber, pageSize),
+                questionsByKeyword.getTotalElements()
+        );
+    }
+
+    public List<QuestionPayload> findQuestionsBySubjectName(String subjectName) {
+        List<Question> questionsBySubjectName
+                = questionRepository.findBySubjectName(subjectName);
+
+        return questionsBySubjectName
+                .stream()
+                .map(QuestionPayloadMapper::mapToQuestionPayload)
+                .collect(Collectors.toList());
     }
 }

@@ -6,9 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -60,6 +58,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<ConfirmationToken> tokens = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Session> sessions = new ArrayList<>();
 
 
 
