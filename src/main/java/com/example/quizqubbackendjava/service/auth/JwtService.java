@@ -29,6 +29,8 @@ import java.util.Collections;
 @Slf4j
 public class JwtService implements UserDetailsService {
     private static final String USER_NOT_FOUND_MESSAGE = "Not found user with username %s";
+    private static final String BAD_CREDENTIALS_MESSAGE = "Bad credentials from user";
+    private static final String USER_DISABLED_MESSAGE = "Account with username %s is disabled";
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
@@ -75,8 +77,10 @@ public class JwtService implements UserDetailsService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException exception) {
             log.error("User is disabled");
+            throw new DisabledException(String.format(USER_DISABLED_MESSAGE, username));
         } catch (BadCredentialsException badCredentialsException) {
             log.error("Bard credentials from user");
+            throw new BadCredentialsException(BAD_CREDENTIALS_MESSAGE);
         }
     }
 
