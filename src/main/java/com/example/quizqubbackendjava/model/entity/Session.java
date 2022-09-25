@@ -48,8 +48,8 @@ public class Session {
     @Column(name = "finished")
     private boolean finished = false;
 
-    @Column(name = "score")
-    private double score;
+    @Column(name = "percentage_score")
+    private String percentageScore;
 
 
 

@@ -28,4 +28,7 @@ public class Subject {
 
     @OneToMany(cascade = ALL, mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(cascade = ALL, mappedBy = "subject")
+    private List<Session> sessions = new ArrayList<>();
 }
