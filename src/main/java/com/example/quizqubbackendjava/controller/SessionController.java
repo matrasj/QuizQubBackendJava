@@ -43,4 +43,14 @@ public class SessionController {
                 .body(sessionService.findStudentSessionsForTeacherDashboard(pageNumber, pageSize));
     }
 
+    @GetMapping("/pagination/students/filterBySubjectName")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<Page<SessionPayloadResponse>> getStudentSessionsForTeacherDashboard(@RequestParam int pageNumber,
+                                                                                              @RequestParam int pageSize,
+                                                                                              @RequestParam String subjectName) {
+
+        return ResponseEntity.status(OK)
+                .body(sessionService.findStudentSessionsForFilteredBySubjectName(subjectName, pageNumber, pageSize));
+    }
+
 }

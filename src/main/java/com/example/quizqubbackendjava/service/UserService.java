@@ -40,7 +40,7 @@ public class UserService {
     private final SubjectRepository subjectRepository;
     private final SessionRepository sessionRepository;
 
-    @PostConstruct
+//    @PostConstruct
     @Transactional
     public void initRoles() {
         Role studentRole = Role.builder()
@@ -193,5 +193,19 @@ public class UserService {
                 }));
 
         return attempts;
+    }
+
+    public Page<UserPayloadResponse> findUserWithPaginationByRoleName(String roleName, int pageSize, int pageNumber) {
+        Page<User> usersFilteredByRoleName
+                = userRepository.findByRoleName(roleName, PageRequest.of(pageNumber, pageSize));
+
+        return new PageImpl<>(
+                usersFilteredByRoleName
+                        .stream()
+                        .map(UserPayloadResponseMapper::mapToUserPayloadResponse)
+                        .collect(Collectors.toList()),
+                PageRequest.of(pageNumber, pageSize),
+                usersFilteredByRoleName.getTotalElements()
+        );
     }
 }

@@ -53,6 +53,15 @@ public class QuestionController {
                 .body(questionService.findQuestionsWithPagination(pageNumber, pageSize));
     }
 
+    @GetMapping("/pagination/findBySubjectName")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<Page<QuestionPayloadResponse>> getQuestionsWithPagination(@RequestParam int pageNumber,
+                                                                                    @RequestParam int pageSize,
+                                                                                    @RequestParam String subjectName) {
+        return ResponseEntity.status(OK)
+                .body(questionService.findQuestionsBySubjectNameWithPagination(subjectName, pageNumber, pageSize));
+    }
+
     @GetMapping("/pagination/findByContentKeywordContaining")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<Page<QuestionPayloadResponse>> getQuestionsWithPaginationByContentContaining(@RequestParam int pageNumber,

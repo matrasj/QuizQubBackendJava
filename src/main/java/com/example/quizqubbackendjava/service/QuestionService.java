@@ -152,4 +152,18 @@ public class QuestionService {
                 .map(QuestionPayloadMapper::mapToQuestionPayload)
                 .collect(Collectors.toList());
     }
+
+    public Page<QuestionPayloadResponse> findQuestionsBySubjectNameWithPagination(String subjectName, int pageNumber, int pageSize) {
+        Page<Question> questionsByKeyword =
+                questionRepository.findBySubjectName(subjectName, PageRequest.of(pageNumber, pageSize));
+
+        return new PageImpl<>(
+                questionsByKeyword
+                        .stream()
+                        .map(QuestionPayloadResponseMapper::mapToQuestionPayloadResponse)
+                        .collect(Collectors.toList()),
+                PageRequest.of(pageNumber, pageSize),
+                questionsByKeyword.getTotalElements()
+        );
+    }
 }

@@ -16,6 +16,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     Optional<Question> findByContent(@Param("content") String content);
     void deleteByContent(@Param("content") String content);
     Page<Question> findByContentContaining(@Param("keyword") String keyword, Pageable pageable);
+    Page<Question> findBySubjectName(@Param("subjectName") String subjectName, Pageable pageable);
     List<Question> findBySubjectName(@Param("subjectName") String subjectName);
+
 
 }

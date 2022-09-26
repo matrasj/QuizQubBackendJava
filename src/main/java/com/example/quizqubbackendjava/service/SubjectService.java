@@ -28,7 +28,7 @@ public class SubjectService {
                 .collect(Collectors.toList());
     }
 
-    @PostConstruct
+//    @PostConstruct
     @Transactional
     public void createSubjects() {
         Subject it = Subject

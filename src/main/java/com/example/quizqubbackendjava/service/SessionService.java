@@ -85,4 +85,19 @@ public class SessionService {
                 studentSessions.getTotalElements()
         );
     }
+
+    public Page<SessionPayloadResponse> findStudentSessionsForFilteredBySubjectName(String subjectName, int pageNumber, int pageSize) {
+        Page<Session> studentSessions
+                = sessionRepository.findByUserRoleNameAndSubjectName("STUDENT", subjectName, PageRequest.of(pageNumber, pageSize));
+
+        return new PageImpl<>(
+                studentSessions
+                        .stream()
+                        .map(SessionPayloadResponseMapper::mapToSessionPayloadResponse)
+                        .collect(Collectors.toList()),
+                PageRequest.of(pageNumber, pageSize),
+                studentSessions.getTotalElements()
+        );
+
+    }
 }

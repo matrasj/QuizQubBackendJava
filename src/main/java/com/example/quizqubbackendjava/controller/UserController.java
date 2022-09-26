@@ -63,5 +63,15 @@ public class UserController {
                 .body(userService.findAttemptsByUserId(userId));
     }
 
+    @GetMapping("/findByRoleName")
+    public ResponseEntity<Page<UserPayloadResponse>> getUserWithPaginationByRoleName(@RequestParam int pageSize,
+                                                                                      @RequestParam int pageNumber,
+                                                                                      @RequestParam String roleName) {
+        return ResponseEntity.status(OK)
+                .body(userService.findUserWithPaginationByRoleName(roleName, pageSize, pageNumber));
+    }
+
+
+
 
 }
