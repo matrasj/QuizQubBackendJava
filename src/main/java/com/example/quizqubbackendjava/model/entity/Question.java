@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @Getter
 @Setter
-@ToString
 @Table(name = "question")
 public class Question {
     @Id

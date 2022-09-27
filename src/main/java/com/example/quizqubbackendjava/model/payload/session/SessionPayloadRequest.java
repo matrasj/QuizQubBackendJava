@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,5 +18,5 @@ public class SessionPayloadRequest {
     private int minutesMaxDuration;
     private String durationTime;
     private boolean finished;
-    private String percentageScore;
+    private BigDecimal percentageScore;
 }

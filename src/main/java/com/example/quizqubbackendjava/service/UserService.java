@@ -18,11 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -207,5 +204,19 @@ public class UserService {
                 PageRequest.of(pageNumber, pageSize),
                 usersFilteredByRoleName.getTotalElements()
         );
+    }
+
+    public Map<String, BigDecimal> findAverageScoresForEverySubject(Long userId) {
+        Map<String, BigDecimal> averageScore = new HashMap<>();
+        List<String> averagesScoreJpa = sessionRepository.findAveragesForEverySubjectByUserId(userId); // Geography,60.4
+        averagesScoreJpa.forEach((score) -> {
+            String[] subjectAndScore = score.split(",");
+            averageScore.put(
+                        Optional.of(subjectAndScore[0]).orElse("0"),
+                        subjectAndScore.length < 2 ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(subjectAndScore[1])));
+
+        });
+
+        return averageScore;
     }
 }

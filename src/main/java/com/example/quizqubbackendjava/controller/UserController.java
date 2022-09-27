@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     public ResponseEntity<UserPayloadResponse> getUserById(@PathVariable Long userId) {
         return ResponseEntity.status(OK)
                 .body(userService.getUserDataById(userId));
@@ -58,10 +59,22 @@ public class UserController {
 
 
     @GetMapping("/findAttemptsByUserId")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     public ResponseEntity<Map<String, Integer>> findAttempts(@RequestParam Long userId) {
         return ResponseEntity.status(OK)
                 .body(userService.findAttemptsByUserId(userId));
     }
+
+    @GetMapping("/findAverageScoresByUserId")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
+    public ResponseEntity<Map<String, BigDecimal>> getAverageScoresForSubjects(@RequestParam Long userId) {
+        userService.findAverageScoresForEverySubject(userId);
+        return ResponseEntity.status(OK)
+                .body(userService.findAverageScoresForEverySubject(userId));
+    }
+
+
+
 
     @GetMapping("/findByRoleName")
     public ResponseEntity<Page<UserPayloadResponse>> getUserWithPaginationByRoleName(@RequestParam int pageSize,

@@ -89,7 +89,6 @@ public class SessionService {
     public Page<SessionPayloadResponse> findStudentSessionsForFilteredBySubjectName(String subjectName, int pageNumber, int pageSize) {
         Page<Session> studentSessions
                 = sessionRepository.findByUserRoleNameAndSubjectName("STUDENT", subjectName, PageRequest.of(pageNumber, pageSize));
-
         return new PageImpl<>(
                 studentSessions
                         .stream()
