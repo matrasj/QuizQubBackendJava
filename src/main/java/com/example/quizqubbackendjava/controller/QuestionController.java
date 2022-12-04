@@ -5,6 +5,7 @@ import com.example.quizqubbackendjava.model.payload.question.QuestionPayloadRequ
 import com.example.quizqubbackendjava.model.payload.question.QuestionPayloadResponse;
 import com.example.quizqubbackendjava.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,11 +84,20 @@ public class QuestionController {
     }
 
     @GetMapping("/findBySubjectName")
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
     public ResponseEntity<List<QuestionPayload>> getQuestionsBySubjectName(@RequestParam String subjectName) {
         return ResponseEntity.status(OK)
                 .body(questionService.findQuestionsBySubjectName(subjectName));
     }
+
+    @GetMapping
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<List<QuestionPayload>> getAllQuestions() {
+        return ResponseEntity.status(OK)
+                .body(questionService.findAllQuestions());
+    }
+
+
 
 
 

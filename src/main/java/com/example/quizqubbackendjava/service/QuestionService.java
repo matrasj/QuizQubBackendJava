@@ -167,4 +167,11 @@ public class QuestionService {
                 questionsByKeyword.getTotalElements()
         );
     }
+
+    public List<QuestionPayload> findAllQuestions() {
+        return questionRepository.findAll()
+                .stream()
+                .map(QuestionPayloadMapper::mapToQuestionPayload)
+                .collect(Collectors.toList());
+    }
 }

@@ -55,7 +55,7 @@ public class AuthService {
             throw new UserAlreadyExistsException(String.format(USER_ALREADY_EXISTS_MESSAGE, username));
         }
 
-        Role userRole = roleRepository.findByName("USER");
+        Role userRole = roleRepository.findByName("STUDENT");
         ConfirmationToken confirmationToken = ConfirmationTokenFactory.createConfirmationToken();
 
         User user = User.builder()
@@ -73,6 +73,7 @@ public class AuthService {
 
         userRepository.save(user);
         confirmationTokenRepository.save(confirmationToken);
+        roleRepository.save(userRole);
 
         emailSenderService.sendConfirmationEmail(user, confirmationToken.getToken());
 
